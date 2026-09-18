@@ -79,10 +79,10 @@ int main(void) {
     CNPU1bits.CN0PUE = 1; // RA4
     while(1){
       
-        if(PORTBbits.RB7==0) { 
+        while(PORTBbits.RB7==0) { 
             if(PORTBbits.RB4 == 0){
                LATBbits.LATB9 =1;
-             
+              
             }
             
             if(PORTAbits.RA4 == 0){
@@ -90,6 +90,12 @@ int main(void) {
             }
             
             LATBbits.LATB9 =1;
+            for(long int i=0; i<50000; i++){
+            }
+            LATBbits.LATB9 =0;
+            for(long int i=0; i<50000; i++){
+            }
+            
             
 
            
@@ -97,19 +103,26 @@ int main(void) {
      
        
         }
-        else if(PORTBbits.RB4==0) {
+        while(PORTBbits.RB4==0) {
             if(PORTBbits.RB7 == 0){
                 LATBbits.LATB9 =1;
+                break;
             }            
             if(PORTAbits.RA4 == 0){
                 LATBbits.LATB9 =1;
+                break;
             }
             
             LATBbits.LATB9 =1;
+            for(long int i=0; i<50000; i++){
+            }
+            LATBbits.LATB9 =0;
+            for(long int i=0; i<50000; i++){
+            }
         }
         
         
-        else if(PORTAbits.RA4==0) {
+        while(PORTAbits.RA4==0) {
             if(PORTBbits.RB4 == 0){
                 LATBbits.LATB9 =1;
             }
@@ -119,10 +132,15 @@ int main(void) {
             }
             
             LATBbits.LATB9 =1;
-            
-        } else {
+            for(long int i=0; i<50000; i++){
+            }
             LATBbits.LATB9 =0;
-        }
+            for(long int i=0; i<50000; i++){
+            }
+            
+        } 
+        LATBbits.LATB9 =0;
+        
         
         
         
