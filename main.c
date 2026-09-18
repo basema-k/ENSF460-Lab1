@@ -82,11 +82,12 @@ int main(void) {
         while(PORTBbits.RB7==0) { 
             if(PORTBbits.RB4 == 0){
                LATBbits.LATB9 =1;
-              
+               break;
             }
             
             if(PORTAbits.RA4 == 0){
                 LATBbits.LATB9 =1;
+                break;
             }
             
             LATBbits.LATB9 =1;
@@ -95,11 +96,6 @@ int main(void) {
             LATBbits.LATB9 =0;
             for(long int i=0; i<50000; i++){
             }
-            
-            
-
-           
-        
      
        
         }
@@ -125,10 +121,12 @@ int main(void) {
         while(PORTAbits.RA4==0) {
             if(PORTBbits.RB4 == 0){
                 LATBbits.LATB9 =1;
+                break;
             }
             
             if(PORTBbits.RB7 == 0){
                 LATBbits.LATB9 =1;
+                break;
             }
             
             LATBbits.LATB9 =1;
@@ -139,14 +137,10 @@ int main(void) {
             }
             
         } 
-        LATBbits.LATB9 =0;
-        
-        
-        
-        
-        
-    
-}
+       
+}  
+    while(PORTAbits.RA4==1 && PORTBbits.RB4==1 && PORTBbits.RB7==1){
+        LATBbits.LATB9 =0;}
     return 0;
 } 
  
