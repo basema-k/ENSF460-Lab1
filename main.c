@@ -20,7 +20,7 @@
 // FOSC
 #pragma config POSCMOD = NONE           // Primary Oscillator Configuration bits (Primary oscillator disabled)
 #pragma config OSCIOFNC = ON            // CLKO Enable Configuration bit (CLKO output disabled; pin functions as port I/O)
-#pragma config POSCFREQ = HS            // Primary Oscillator Frequency Range Configuration bits (Primary oscillator/external clock input frequency greater than 8 MHz)
+#pragma config POSCFREQ = HS            // Primary Oscillator Frez  quency Range Configuration bits (Primary oscillator/external clock input frequency greater than 8 MHz)
 #pragma config SOSCSEL = SOSCHP         // SOSC Power Selection Configuration bits (Secondary oscillator configured for high-power operation)
 #pragma config FCKSM = CSECMD           // Clock Switching and Monitor Selection (Clock switching is enabled, Fail-Safe Clock Monitor is disabled)
 
@@ -61,11 +61,6 @@ int main(void) {
   
     AD1PCFG = 0xFFFF; /* keep this line as it sets I/O pins that can also be analog to be digital */
     
-    /** This is usually where you would add run-once code
-     * e.g., peripheral initialization. For the first labs
-     * you might be fine just having it here. For more complex
-     * projects, you might consider having one or more initialize() functions
-     */
     
     // inputs: RB7, RB4, RA4
     TRISBbits.TRISB7 = 1; // set RB7 as input
@@ -75,72 +70,78 @@ int main(void) {
     TRISBbits.TRISB9 = 0; // set RB9 as output
     
     CNPU2bits.CN23PUE = 1; // RB7 pull up low active (if pressed it is 0))
-    CNPU1bits.CN1PUE = 1; // RB4
-    CNPU1bits.CN0PUE = 1; // RA4
+    CNPU1bits.CN1PUE = 1; // RB4 pull up low active (if pressed it is 0))
+    CNPU1bits.CN0PUE = 1; // RA4 pull up low active (if pressed it is 0))
     while(1){
       
-        while(PORTBbits.RB7==0) { 
-            if(PORTBbits.RB4 == 0){
-               LATBbits.LATB9 =1;
+        while(PORTBbits.RB7==0) { // Check if the PB1 is pressed
+            if(PORTBbits.RB4 == 0){ // Check if PB2 is pressed while PB1 is pressed (Both PB1 and PB2 are pressed)
+               LATBbits.LATB9 =1; // When both buttons are pressed, LED turns on.
                break;
             }
             
-            if(PORTAbits.RA4 == 0){
-                LATBbits.LATB9 =1;
+            if(PORTAbits.RA4 == 0){ //Check if PB3 is pressed while PB1 is pressed (Both PB1 and PB3 are pressed)
+                LATBbits.LATB9 =1; // When both buttons are pressed, LED turns on.
                 break;
             }
             
-            LATBbits.LATB9 =1;
-            for(long int i=0; i<50000; i++){
+            LATBbits.LATB9 =1; // When only one button (PB1 in this case) is pressed, LED turns on but for a certain amount of time
+            for(long int i=0; i<214285; i++){ // LED on for 0.75 seconds. Calculation for the upperbound for i is in the report.
+               Nop();  // Nothing happens just keep the LED ON for 0.75 seconds by looping.
             }
-            LATBbits.LATB9 =0;
-            for(long int i=0; i<50000; i++){
+            LATBbits.LATB9 =0; // After the delay for LED ON, it is now off for certain amount of time, making look like it is blinking.
+            for(long int i=0; i<214285; i++){ // LED off for 0.75 seconds
+               Nop(); // Nothing happens just keep the LED OFF for 0.75 seconds by looping.
             }
-     
+            
        
         }
-        while(PORTBbits.RB4==0) {
-            if(PORTBbits.RB7 == 0){
-                LATBbits.LATB9 =1;
-                break;
+        while(PORTBbits.RB4==0) { // Check if the PB2 is pressed
+            if(PORTBbits.RB7 == 0){ // Check if PB1 is pressed while PB2 is pressed (Both PB1 and PB2 are pressed)
+                LATBbits.LATB9 =1;  // When both buttons are pressed, LED turns on.
+                break; // After turning on the LED, it will now exit the while loop and return to the state where no buttons are pressed (LED OFF) 
             }            
-            if(PORTAbits.RA4 == 0){
-                LATBbits.LATB9 =1;
+            if(PORTAbits.RA4 == 0){ // Check if PB3 is pressed while PB2 is pressed (Both PB2 and PB3 are pressed)
+                LATBbits.LATB9 =1;  // When both buttons are pressed, LED turns on.
                 break;
             }
             
-            LATBbits.LATB9 =1;
-            for(long int i=0; i<50000; i++){
+            LATBbits.LATB9 =1; // When only one button (PB2 in this case) is pressed, LED turns on but for a certain amount of time
+            for(long int i=0; i<571428; i++){ // LED on for 2 seconds
+                Nop(); // Nothing happens just keep the LED on for 2seconds by looping.
             }
-            LATBbits.LATB9 =0;
-            for(long int i=0; i<50000; i++){
+            LATBbits.LATB9 =0; // After the delay for LED ON, it is now off for certain amount of time, making look like it is blinking.
+            for(long int i=0; i<571428; i++){ // LED off for 2 seconds
+                Nop(); // Nothing happens just keep the LED off for 2seconds by looping.
             }
         }
         
         
-        while(PORTAbits.RA4==0) {
-            if(PORTBbits.RB4 == 0){
-                LATBbits.LATB9 =1;
+        while(PORTAbits.RA4==0) { // Check if the PB3 is pressed
+            if(PORTBbits.RB4 == 0){ // Check if PB2 is pressed while PB3 is pressed (Both PB3 and PB2 are pressed)
+                LATBbits.LATB9 =1;  // When both buttons are pressed, LED turns on.
                 break;
             }
             
-            if(PORTBbits.RB7 == 0){
-                LATBbits.LATB9 =1;
+            if(PORTBbits.RB7 == 0){ // Check if PB1 is pressed while PB3 is pressed (Both PB1 and PB3 are pressed)
+                LATBbits.LATB9 =1;  // When both buttons are pressed, LED turns on.
                 break;
             }
             
-            LATBbits.LATB9 =1;
-            for(long int i=0; i<50000; i++){
+            LATBbits.LATB9 =1; // When only one button (PB3 in this case) is pressed, LED turns on but for a certain amount of time
+            for(long int i=0; i<1428571; i++){ //LED on for 5 seconds
+                Nop(); // Nothing happens just keep the LED on for 2seconds by looping.
             }
-            LATBbits.LATB9 =0;
-            for(long int i=0; i<50000; i++){
+            LATBbits.LATB9 =0; // After the delay for LED ON, it is now off for certain amount of time, making look like it is blinking.
+            for(long int i=0; i<1428571; i++){ //LED off for 5 seconds
+                Nop(); // Nothing happens just keep the LED off for 2seconds by looping.
             }
             
         } 
-       
-}  
+               
+    
+    } 
     while(PORTAbits.RA4==1 && PORTBbits.RB4==1 && PORTBbits.RB7==1){
-        LATBbits.LATB9 =0;}
+        LATBbits.LATB9 =0;} // when none of the buttons are pressed, LED should always be OFF
     return 0;
 } 
- 
